@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  database:
+    image: postgres:14.19-trixie
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: demodb
+    ports:
+    - "5432:5432"
+    volumes:
+    - db_data:/var/lib/postgresql/data
+
+  service_a:
+    build:
+      context: ./service_a
+      dockerfile: Dockerfile
+    container_name: service_a
+    environment:
+      DATABASE_URL: postgresql://admin:admin@database:5432/demodb
+    depends_on:
+      - database
+    ports:
+    - "8000:8000"
+  
+volumes:
+  db_data:

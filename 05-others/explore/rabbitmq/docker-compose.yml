@@ -3,8 +3,8 @@ services:
   rabbitmq:
     image: rabbitmq:3-management
     ports:
-      - "5672:5672"     # AMQP
-      - "15672:15672"   # UI http://localhost:15672
+      - "5672:5672"
+      - "15672:15672"
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
@@ -20,7 +20,9 @@ services:
       - rabbitmq
     environment:
       RABBITMQ_HOST: rabbitmq
-  
+    volumes:
+      - ./publisher:/app   # <--- live code sync
+
   consumer:
     build:
       context: ./consumer
@@ -32,3 +34,5 @@ services:
       - rabbitmq
     environment:
       RABBITMQ_HOST: rabbitmq
+    volumes:
+      - ./consumer:/app   # <--- live code sync
